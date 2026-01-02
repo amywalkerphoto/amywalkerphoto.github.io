@@ -90,6 +90,7 @@ var pages = {
 document.addEventListener('DOMContentLoaded', function(event) {
   const currentPageId = getCurrentPageId();
   buildNavigation();
+  setupMobileMenu();
   renderPage(currentPageId);
   setupHorizontalScroll();
 });
@@ -214,7 +215,9 @@ function setupHorizontalScroll() {
 // populates the navigation sidebar (left) with menu items
 function buildNavigation() {
   nav = document.getElementById('nav');
+  drawer = document.getElementById('nav-drawer-content');
   nav.innerHTML = '';
+  if (drawer) drawer.innerHTML = '';
   for ( p in pages ) {
     if( pages[p].hyperlink ) {
       hyperlink = document.createElement('A');
@@ -224,6 +227,13 @@ function buildNavigation() {
       menu_item.id = pages[p].id + '_link' ;
       menu_item.appendChild(hyperlink);
       nav.appendChild(menu_item)
+
+      if (drawer) {
+        const drawerLink = hyperlink.cloneNode(true);
+        const drawerItem = document.createElement('DIV');
+        drawerItem.appendChild(drawerLink);
+        drawer.appendChild(drawerItem);
+      }
     }
   }
 
@@ -240,6 +250,10 @@ function buildNavigation() {
   insta.appendChild(instaImg);
   social.appendChild(insta);
   nav.appendChild(social);
+  if (drawer) {
+    const drawerSocial = social.cloneNode(true);
+    drawer.appendChild(drawerSocial);
+  }
 }
 
 // handles the 'active' class on the menu items in the navigation sidebar
@@ -251,4 +265,28 @@ function makeActive(pageId) {
     next = document.getElementById(pageId + '_link');
     if( next ) { next.classList.add('active'); }
     currentlyActivePageId = pageId;
+}
+
+function setupMobileMenu() {
+  const toggle = document.getElementById('menu-toggle');
+  const closeBtn = document.getElementById('menu-close');
+  const drawer = document.getElementById('nav-drawer');
+  if (!toggle || !drawer) return;
+
+  const open = () => {
+    drawer.classList.add('open');
+    document.body.classList.add('drawer-open');
+  };
+  const close = () => {
+    drawer.classList.remove('open');
+    document.body.classList.remove('drawer-open');
+  };
+
+  toggle.addEventListener('click', open);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  drawer.addEventListener('click', function(e) {
+    if (e.target === drawer) {
+      close();
+    }
+  });
 }
