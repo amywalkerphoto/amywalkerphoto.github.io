@@ -250,11 +250,25 @@ a:hover {
 
   #menu-toggle,
   #menu-close {
-    font-size: 22px;
-    background: none;
+    width: 32px;
+    height: 32px;
+    background: transparent;
     border: none;
-    padding: 4px 8px;
+    padding: 0;
     cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    font-size: 0;
+    color: transparent;
+  }
+
+  #menu-toggle {
+    background-image: url('./icons/Hamburger_icon.svg.png');
+  }
+
+  #menu-close {
+    background-image: url('./icons/close.png');
   }
 
   #nav-drawer {
